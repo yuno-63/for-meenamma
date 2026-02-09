@@ -66,18 +66,9 @@
             transform: translateX(-150vw);
         }
 
-        .airplane {
-            font-size: 70px;
-            z-index: 35;
-            filter: drop-shadow(2px 5px 8px rgba(0,0,0,0.1));
-        }
+        .airplane { font-size: 70px; z-index: 35; filter: drop-shadow(2px 5px 8px rgba(0,0,0,0.1)); }
 
-        .wavy-thread {
-            width: 80px;
-            height: 30px;
-            margin: 0 -5px;
-            z-index: 20;
-        }
+        .wavy-thread { width: 80px; height: 30px; margin: 0 -5px; z-index: 20; }
 
         .thread-path {
             fill: none;
@@ -107,30 +98,22 @@
         .fly-in-stop { animation: flyInStop 2.8s forwards cubic-bezier(0.19, 1, 0.22, 1); }
         .fly-away { animation: flyAway 2s forwards ease-in; }
 
-        @keyframes flyInStop {
-            0% { transform: translateX(-150vw); }
-            100% { transform: translateX(0); }
-        }
-
-        @keyframes flyAway {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(160vw); }
-        }
+        @keyframes flyInStop { 0% { transform: translateX(-150vw); } 100% { transform: translateX(0); } }
+        @keyframes flyAway { 0% { transform: translateX(0); } 100% { transform: translateX(160vw); } }
 
         button { background: var(--primary-red); color: white; border: none; padding: 12px 30px; border-radius: 50px; font-weight: 600; cursor: pointer; transition: 0.3s; margin-top: 15px; }
         input { width: 85%; padding: 12px; margin: 10px 0; border: 2px solid var(--soft-pink); border-radius: 12px; outline: none; }
-        .flashcard-img { width: 100%; max-height: 250px; object-fit: cover; border-radius: 12px; border: 5px solid white; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .flashcard-img { width: 100%; max-height: 250px; object-fit: cover; border-radius: 12px; border: 5px solid white; }
         #noBtn { position: absolute; background: #95a5a6; z-index: 100; font-size: 14px; padding: 8px 20px; }
-        
-        /* Entirely hide the player */
-        #player { position: absolute; top: -1000px; left: -1000px; visibility: hidden; }
     </style>
 </head>
 <body>
 
     <div class="hearts-bg"></div>
     
-    <div id="player"></div>
+    <audio id="bgMusic" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    </audio>
 
     <div class="cloud cloud-small" style="top: 15%; animation-duration: 25s; opacity: 0.5;"></div>
 
@@ -192,27 +175,6 @@
     </div>
 
     <script>
-        // YouTube API Setup
-        var tag = document.createElement('script');
-        tag.src = "https://www.youtube.com/iframe_api";
-        var firstScriptTag = document.getElementsByTagName('script')[0];
-        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-        var player;
-        function onYouTubeIframeAPIReady() {
-            player = new YT.Player('player', {
-                height: '0',
-                width: '0',
-                videoId: 'H9Hnisaqlns', // Soft Romantic Music
-                playerVars: {
-                    'autoplay': 0,
-                    'controls': 0,
-                    'loop': 1,
-                    'playlist': 'H9Hnisaqlns'
-                }
-            });
-        }
-
         const USER = "meenamma";
         const PASS = "i love you";
         const memories = [
@@ -234,10 +196,9 @@
         let memIdx = 0, qIdx = 0, score = 0;
 
         function startExperience() {
-            // Play music when user clicks START
-            if (player && player.playVideo) {
-                player.playVideo();
-            }
+            // DIRECT START OF AUDIO
+            const audio = document.getElementById('bgMusic');
+            audio.play().catch(e => console.log("Audio play failed:", e));
             nextPage(2);
         }
 
@@ -254,7 +215,7 @@
         function validateLogin() {
             if(document.getElementById('userInput').value.toLowerCase() === USER && 
                document.getElementById('passInput').value === PASS) nextPage(3);
-            else alert("Check your credentials, my love!");
+            else alert("Check your credentials!");
         }
 
         function updateContent() {
