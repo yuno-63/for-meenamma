@@ -34,7 +34,7 @@
 
         @keyframes moveBg { from { background-position: 0 0; } to { background-position: 80px 80px; } }
 
-        /* Drifting Clouds */
+        /* Clouds */
         .cloud {
             position: absolute;
             background: var(--cloud-white);
@@ -44,8 +44,6 @@
         }
         .cloud::after, .cloud::before { content: ''; position: absolute; background: var(--cloud-white); border-radius: 50%; }
         .cloud-small { width: 100px; height: 35px; }
-        .cloud-small::after { width: 50px; height: 50px; top: -25px; left: 15px; }
-        .cloud-small::before { width: 40px; height: 40px; top: -15px; left: 45px; }
         @keyframes drift { from { transform: translateX(-250px); } to { transform: translateX(110vw); } }
 
         .page {
@@ -60,7 +58,7 @@
         }
         .active { display: flex; }
 
-        /* THE PLANE UNIT */
+        /* PLANE UNIT - Airplane on the Right pulling from the front */
         #plane-unit {
             position: relative;
             display: flex;
@@ -72,32 +70,34 @@
         }
 
         .airplane {
-            font-size: 75px;
+            font-size: 70px;
             z-index: 35;
             filter: drop-shadow(2px 5px 8px rgba(0,0,0,0.1));
-            transform: scaleX(-1); /* Points plane forward */
+            /* Points plane to the right (Normal orientation) */
+            transform: rotate(0deg); 
+            margin-left: -10px;
         }
 
-        /* THE REALISTIC WAVY THREAD */
+        /* WAVY TOW THREAD */
         .wavy-thread {
-            width: 120px;
-            height: 40px;
-            margin: 0 -15px;
+            width: 80px;
+            height: 30px;
+            margin: 0 -5px;
             z-index: 20;
         }
 
         .thread-path {
             fill: none;
-            stroke: #555;
-            stroke-width: 2.5;
+            stroke: #444;
+            stroke-width: 2;
             stroke-linecap: round;
-            stroke-dasharray: 5, 5; /* Makes it look like twisted rope */
-            animation: waveMotion 2s ease-in-out infinite;
+            stroke-dasharray: 4, 4;
+            animation: towWave 1.5s ease-in-out infinite;
         }
 
-        @keyframes waveMotion {
-            0%, 100% { d: path("M0,20 Q30,5 60,20 T120,20"); }
-            50% { d: path("M0,20 Q30,35 60,20 T120,20"); }
+        @keyframes towWave {
+            0%, 100% { d: path("M0,15 Q20,5 40,15 T80,15"); }
+            50% { d: path("M0,15 Q20,25 40,15 T80,15"); }
         }
 
         .glass-card {
@@ -111,9 +111,9 @@
             z-index: 30;
         }
 
-        /* FLIGHT TIMING */
-        .fly-in-stop { animation: flyInStop 3s forwards cubic-bezier(0.2, 0.8, 0.2, 1); }
-        .fly-away { animation: flyAway 2.2s forwards ease-in; }
+        /* FLIGHT MOTION */
+        .fly-in-stop { animation: flyInStop 2.8s forwards cubic-bezier(0.19, 1, 0.22, 1); }
+        .fly-away { animation: flyAway 2s forwards ease-in; }
 
         @keyframes flyInStop {
             0% { transform: translateX(-150vw); }
@@ -126,7 +126,6 @@
         }
 
         button { background: var(--primary-red); color: white; border: none; padding: 12px 30px; border-radius: 50px; font-weight: 600; cursor: pointer; transition: 0.3s; margin-top: 15px; }
-        button:hover { transform: scale(1.05); background: #b32021; }
         input { width: 85%; padding: 12px; margin: 10px 0; border: 2px solid var(--soft-pink); border-radius: 12px; outline: none; }
         .flashcard-img { width: 100%; max-height: 250px; object-fit: cover; border-radius: 12px; border: 5px solid white; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
         #noBtn { position: absolute; background: #95a5a6; z-index: 100; font-size: 14px; padding: 8px 20px; }
@@ -141,7 +140,6 @@
     </div>
     
     <div class="cloud cloud-small" style="top: 15%; animation-duration: 25s; opacity: 0.5;"></div>
-    <div class="cloud cloud-large" style="top: 70%; animation-duration: 40s; opacity: 0.3; left: -200px;"></div>
 
     <div id="page1" class="page active">
         <div class="glass-card">
@@ -161,15 +159,15 @@
 
     <div id="page3" class="page">
         <div id="plane-unit">
-            <div class="airplane">✈️</div>
-            <svg class="wavy-thread" viewBox="0 0 120 40">
-                <path class="thread-path" d="M0,20 Q30,5 60,20 T120,20" />
-            </svg>
             <div class="glass-card">
                 <img id="displayImg" class="flashcard-img" src="pic1.jpeg">
                 <p id="displayMsg" style="color: #636e72; font-size: 0.9em; margin-top: 10px;"></p>
                 <button onclick="triggerNextPlane()">Next Memory</button>
             </div>
+            <svg class="wavy-thread" viewBox="0 0 80 30">
+                <path class="thread-path" d="M0,15 Q20,5 40,15 T80,15" />
+            </svg>
+            <div class="airplane">✈️</div>
         </div>
     </div>
 
@@ -264,7 +262,7 @@
                     void unit.offsetWidth;
                     unit.classList.add('fly-in-stop');
                 } else nextPage(4);
-            }, 2200);
+            }, 2000);
         }
 
         function showQ() {
