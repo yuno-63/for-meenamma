@@ -21,7 +21,7 @@
             background-color: var(--bg-pink);
         }
 
-        /* Scattered Hearts Background */
+        /* Hearts Background */
         .hearts-bg {
             position: fixed;
             top: 0; left: 0;
@@ -31,6 +31,8 @@
             z-index: 1;
             animation: moveBg 20s linear infinite;
         }
+
+        @keyframes moveBg { from { background-position: 0 0; } to { background-position: 80px 80px; } }
 
         /* Clouds */
         .cloud {
@@ -44,12 +46,8 @@
         .cloud-small { width: 100px; height: 35px; }
         .cloud-small::after { width: 50px; height: 50px; top: -25px; left: 15px; }
         .cloud-small::before { width: 40px; height: 40px; top: -15px; left: 45px; }
-        .cloud-large { width: 200px; height: 60px; }
-        .cloud-large::after { width: 100px; height: 100px; top: -50px; left: 30px; }
-        .cloud-large::before { width: 80px; height: 80px; top: -30px; left: 90px; }
-
+        
         @keyframes drift { from { transform: translateX(-250px); } to { transform: translateX(110vw); } }
-        @keyframes moveBg { from { background-position: 0 0; } to { background-position: 80px 80px; } }
 
         .page {
             display: none;
@@ -72,8 +70,10 @@
             max-width: 380px;
             text-align: center;
             border: 1px solid rgba(255, 255, 255, 0.3);
+            position: relative;
         }
 
+        /* Dragging Animation Setup */
         #plane-unit {
             position: relative;
             display: flex;
@@ -84,16 +84,20 @@
 
         .airplane {
             font-size: 55px;
-            z-index: 20;
+            z-index: 30;
             filter: drop-shadow(2px 5px 8px rgba(0,0,0,0.1));
+            margin-bottom: 0;
+            line-height: 1;
         }
 
+        /* The Thread - Made more visible */
         .thread {
-            width: 2px;
-            height: 40px;
-            background: rgba(0,0,0,0.2);
-            margin: -5px 0;
-            z-index: 15;
+            width: 3px;
+            height: 50px;
+            background: #555; /* Darker color for visibility */
+            z-index: 20;
+            margin-top: -5px;
+            margin-bottom: -5px;
         }
 
         .fly-in { animation: flyIn 1.8s forwards cubic-bezier(0.19, 1, 0.22, 1); }
@@ -106,8 +110,6 @@
         input { width: 90%; padding: 12px; margin: 10px 0; border: 2px solid var(--soft-pink); border-radius: 12px; }
         .flashcard-img { width: 100%; max-height: 280px; object-fit: cover; border-radius: 12px; border: 4px solid white; }
         #noBtn { position: absolute; background: #95a5a6; z-index: 100; }
-        
-        /* Hide the music player */
         #music-container { display: none; }
     </style>
 </head>
@@ -118,8 +120,7 @@
         <iframe id="romanticMusic" width="0" height="0" src="https://www.youtube.com/embed/H9Hnisaqlns?enablejsapi=1" frameborder="0"></iframe>
     </div>
     
-    <div class="cloud cloud-large" style="top: 15%; animation-duration: 30s; opacity: 0.4;"></div>
-    <div class="cloud cloud-small" style="top: 30%; animation-duration: 20s; opacity: 0.7;"></div>
+    <div class="cloud cloud-small" style="top: 20%; animation-duration: 25s; opacity: 0.5;"></div>
 
     <div id="page1" class="page active">
         <div class="glass-card">
@@ -200,7 +201,6 @@
         let memIdx = 0, qIdx = 0, score = 0;
 
         function startExperience() {
-            // Trigger music
             const iframe = document.getElementById('romanticMusic');
             iframe.src += "&autoplay=1";
             nextPage(2);
@@ -246,7 +246,7 @@
                 document.getElementById('answerInput').value = "";
             } else {
                 if(score >= 3) nextPage(5);
-                else { alert("Score: "+score+"/5. Try again!"); qIdx=0; score=0; showQ(); }
+                else { alert("Try again!"); qIdx=0; score=0; showQ(); }
             }
         }
 
