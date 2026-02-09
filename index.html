@@ -10,6 +10,7 @@
             --primary-red: #d63031;
             --soft-pink: #fab1a0;
             --bg-pink: #ffeef2;
+            --cloud-white: rgba(255, 255, 255, 0.8);
         }
 
         body, html {
@@ -31,6 +32,35 @@
             animation: moveBg 20s linear infinite;
         }
 
+        /* Animated Clouds */
+        .cloud {
+            position: absolute;
+            background: var(--cloud-white);
+            border-radius: 50px;
+            z-index: 2;
+            animation: drift linear infinite;
+        }
+
+        .cloud::after, .cloud::before {
+            content: '';
+            position: absolute;
+            background: var(--cloud-white);
+            border-radius: 50%;
+        }
+
+        .cloud-small { width: 100px; height: 35px; }
+        .cloud-small::after { width: 50px; height: 50px; top: -25px; left: 15px; }
+        .cloud-small::before { width: 40px; height: 40px; top: -15px; left: 45px; }
+
+        .cloud-large { width: 200px; height: 60px; }
+        .cloud-large::after { width: 100px; height: 100px; top: -50px; left: 30px; }
+        .cloud-large::before { width: 80px; height: 80px; top: -30px; left: 90px; }
+
+        @keyframes drift {
+            from { transform: translateX(-250px); }
+            to { transform: translateX(110vw); }
+        }
+
         @keyframes moveBg {
             from { background-position: 0 0; }
             to { background-position: 80px 80px; }
@@ -49,7 +79,6 @@
 
         .active { display: flex; }
 
-        /* Card Design like your images */
         .glass-card {
             background: rgba(255, 255, 255, 0.95);
             padding: 30px;
@@ -61,16 +90,34 @@
             border: 1px solid rgba(255, 255, 255, 0.3);
         }
 
-        h1, h2 { color: var(--primary-red); margin-bottom: 20px; }
+        /* Airplane Animation */
+        #plane-container {
+            position: relative;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
-        input {
-            width: 90%;
-            padding: 12px;
-            margin: 10px 0;
-            border: 2px solid var(--soft-pink);
-            border-radius: 12px;
-            font-size: 16px;
-            outline: none;
+        .airplane {
+            font-size: 60px;
+            margin-bottom: -10px;
+            transform: rotate(5deg);
+            filter: drop-shadow(2px 5px 8px rgba(0,0,0,0.1));
+            z-index: 15;
+        }
+
+        .fly-in { animation: flyIn 1.5s forwards cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .fly-out { animation: flyOut 1.2s forwards ease-in; }
+
+        @keyframes flyIn {
+            0% { transform: translateX(-150vw) translateY(50px) rotate(15deg); }
+            100% { transform: translateX(0) translateY(0) rotate(0deg); }
+        }
+
+        @keyframes flyOut {
+            0% { transform: translateX(0) rotate(0deg); }
+            100% { transform: translateX(150vw) translateY(-100px) rotate(-10deg); }
         }
 
         button {
@@ -84,33 +131,35 @@
             cursor: pointer;
             transition: 0.3s;
             margin-top: 15px;
-            box-shadow: 0 4px 15px rgba(214, 48, 49, 0.3);
         }
 
-        button:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(214, 48, 49, 0.4); }
+        input {
+            width: 90%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 2px solid var(--soft-pink);
+            border-radius: 12px;
+        }
 
         .flashcard-img {
             width: 100%;
-            max-height: 350px;
+            max-height: 300px;
             object-fit: cover;
             border-radius: 15px;
-            margin-bottom: 15px;
             border: 5px solid white;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
         }
 
-        #noBtn {
-            position: absolute;
-            background: #95a5a6;
-            padding: 10px 20px;
-            font-size: 14px;
-            z-index: 100;
-        }
+        #noBtn { position: absolute; background: #95a5a6; z-index: 100; }
     </style>
 </head>
 <body>
 
     <div class="hearts-bg"></div>
+    
+    <div class="cloud cloud-large" style="top: 10%; animation-duration: 25s; opacity: 0.5;"></div>
+    <div class="cloud cloud-small" style="top: 25%; animation-duration: 18s; opacity: 0.8;"></div>
+    <div class="cloud cloud-large" style="top: 60%; animation-duration: 35s; opacity: 0.4;"></div>
+    <div class="cloud cloud-small" style="top: 80%; animation-duration: 22s; opacity: 0.6;"></div>
 
     <div id="page1" class="page active">
         <div class="glass-card">
@@ -129,10 +178,13 @@
     </div>
 
     <div id="page3" class="page">
-        <div class="glass-card">
-            <img id="displayImg" class="flashcard-img" src="pic1.jpeg">
-            <p id="displayMsg" style="color: #636e72; font-style: italic;"></p>
-            <button onclick="nextFlashcard()">Next Memory</button>
+        <div id="plane-container" class="fly-in">
+            <div class="airplane">✈️</div>
+            <div class="glass-card">
+                <img id="displayImg" class="flashcard-img" src="pic1.jpeg">
+                <p id="displayMsg" style="color: #636e72; font-style: italic;"></p>
+                <button onclick="triggerPlaneTransition()">Next Memory</button>
+            </div>
         </div>
     </div>
 
@@ -151,7 +203,7 @@
             <h1>Will you marry me?</h1>
             <div style="position: relative; height: 150px; width: 100%;">
                 <button onclick="nextPage(6)" style="width: 120px;">YES</button>
-                <button id="noBtn" onmouseover="dodge()" onclick="dodge()">No</button>
+                <button id="noBtn" onmouseover="dodge()">No</button>
             </div>
         </div>
     </div>
@@ -159,7 +211,7 @@
     <div id="page6" class="page">
         <div class="glass-card">
             <h1>You are already my wife ❤️</h1>
-            <div style="font-size: 40px; letter-spacing: 5px;">🌹🌹🌹🌹🌹</div>
+            <div style="font-size: 40px;">🌹🌹🌹🌹🌹</div>
         </div>
     </div>
 
@@ -205,10 +257,22 @@
             document.getElementById('displayMsg').innerText = memories[memIdx].msg;
         }
 
-        function nextFlashcard() {
-            memIdx++;
-            if(memIdx < memories.length) updateFlashcard();
-            else nextPage(4);
+        function triggerPlaneTransition() {
+            const container = document.getElementById('plane-container');
+            container.classList.remove('fly-in');
+            container.classList.add('fly-out');
+
+            setTimeout(() => {
+                memIdx++;
+                if (memIdx < memories.length) {
+                    updateFlashcard();
+                    container.classList.remove('fly-out');
+                    void container.offsetWidth; // Trigger reflow
+                    container.classList.add('fly-in');
+                } else {
+                    nextPage(4);
+                }
+            }, 1200);
         }
 
         function showQuestion() {
