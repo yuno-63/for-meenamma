@@ -21,7 +21,6 @@
             background-color: var(--bg-pink);
         }
 
-        /* Hearts Background */
         .hearts-bg {
             position: fixed;
             top: 0; left: 0;
@@ -34,7 +33,6 @@
 
         @keyframes moveBg { from { background-position: 0 0; } to { background-position: 80px 80px; } }
 
-        /* Clouds */
         .cloud {
             position: absolute;
             background: var(--cloud-white);
@@ -58,7 +56,6 @@
         }
         .active { display: flex; }
 
-        /* PLANE UNIT - Plane on the right pulling the card */
         #plane-unit {
             position: relative;
             display: flex;
@@ -73,12 +70,8 @@
             font-size: 70px;
             z-index: 35;
             filter: drop-shadow(2px 5px 8px rgba(0,0,0,0.1));
-            /* Facing right */
-            transform: rotate(0deg); 
-            margin-left: -10px;
         }
 
-        /* WAVY TOW THREAD */
         .wavy-thread {
             width: 80px;
             height: 30px;
@@ -111,7 +104,6 @@
             z-index: 30;
         }
 
-        /* FLIGHT MOTION */
         .fly-in-stop { animation: flyInStop 2.8s forwards cubic-bezier(0.19, 1, 0.22, 1); }
         .fly-away { animation: flyAway 2s forwards ease-in; }
 
@@ -129,16 +121,17 @@
         input { width: 85%; padding: 12px; margin: 10px 0; border: 2px solid var(--soft-pink); border-radius: 12px; outline: none; }
         .flashcard-img { width: 100%; max-height: 250px; object-fit: cover; border-radius: 12px; border: 5px solid white; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
         #noBtn { position: absolute; background: #95a5a6; z-index: 100; font-size: 14px; padding: 8px 20px; }
-        #music-container { visibility: hidden; position: absolute; }
+        
+        /* Entirely hide the player */
+        #player { position: absolute; top: -1000px; left: -1000px; visibility: hidden; }
     </style>
 </head>
 <body>
 
     <div class="hearts-bg"></div>
-    <div id="music-container">
-        <iframe id="romanticMusic" width="0" height="0" src="https://www.youtube.com/embed/H9Hnisaqlns?enablejsapi=1" frameborder="0"></iframe>
-    </div>
     
+    <div id="player"></div>
+
     <div class="cloud cloud-small" style="top: 15%; animation-duration: 25s; opacity: 0.5;"></div>
 
     <div id="page1" class="page active">
@@ -150,7 +143,7 @@
 
     <div id="page2" class="page">
         <div class="glass-card">
-            <h2 style="color: var(--primary-red);">Meenamma's Login</h2>
+            <h2>Meenamma's Login</h2>
             <input type="text" id="userInput" placeholder="Username">
             <input type="password" id="passInput" placeholder="Password">
             <button onclick="validateLogin()">Login</button>
@@ -193,15 +186,35 @@
 
     <div id="page6" class="page">
         <div class="glass-card">
-            <h1 style="color: var(--primary-red);">"You are already my wife ❤️"</h1>
+            <h1>"You are already my wife ❤️"</h1>
             <div style="font-size: 45px; letter-spacing: 10px;">🌹🌹🌹🌹🌹</div>
         </div>
     </div>
 
     <script>
+        // YouTube API Setup
+        var tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        var player;
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('player', {
+                height: '0',
+                width: '0',
+                videoId: 'H9Hnisaqlns', // Soft Romantic Music
+                playerVars: {
+                    'autoplay': 0,
+                    'controls': 0,
+                    'loop': 1,
+                    'playlist': 'H9Hnisaqlns'
+                }
+            });
+        }
+
         const USER = "meenamma";
         const PASS = "i love you";
-
         const memories = [
             { src: "pic1.jpeg", msg: "I love your smile in this one!" },
             { src: "pic2.jpeg", msg: "This moment felt like a dream." },
@@ -210,7 +223,6 @@
             { src: "pic5.jpeg", msg: "You look so beautiful here." },
             { src: "pic6.jpeg", msg: "My favorite person in the world." }
         ];
-
         const questions = [
             { q: "My favourite Car?", a: "BMW" },
             { q: "The person i love most?", a: "Panda" },
@@ -222,8 +234,10 @@
         let memIdx = 0, qIdx = 0, score = 0;
 
         function startExperience() {
-            const iframe = document.getElementById('romanticMusic');
-            iframe.src += "&autoplay=1";
+            // Play music when user clicks START
+            if (player && player.playVideo) {
+                player.playVideo();
+            }
             nextPage(2);
         }
 
@@ -232,8 +246,7 @@
             document.getElementById('page'+n).classList.add('active');
             if(n === 3) {
                 updateContent();
-                const unit = document.getElementById('plane-unit');
-                unit.classList.add('fly-in-stop');
+                document.getElementById('plane-unit').classList.add('fly-in-stop');
             }
             if(n === 4) showQ();
         }
@@ -253,7 +266,6 @@
             const unit = document.getElementById('plane-unit');
             unit.classList.remove('fly-in-stop');
             unit.classList.add('fly-away');
-
             setTimeout(() => {
                 memIdx++;
                 if (memIdx < memories.length) {
@@ -271,7 +283,7 @@
                 document.getElementById('answerInput').value = "";
             } else {
                 if(score >= 3) nextPage(5);
-                else { alert("Try again!"); qIdx=0; score=0; showQ(); }
+                else { alert("Score: " + score + "/5. Let's try again!"); qIdx=0; score=0; showQ(); }
             }
         }
 
