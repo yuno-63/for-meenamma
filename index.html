@@ -46,7 +46,6 @@
         .cloud-small { width: 100px; height: 35px; }
         .cloud-small::after { width: 50px; height: 50px; top: -25px; left: 15px; }
         .cloud-small::before { width: 40px; height: 40px; top: -15px; left: 45px; }
-        
         @keyframes drift { from { transform: translateX(-250px); } to { transform: translateX(110vw); } }
 
         .page {
@@ -61,31 +60,30 @@
         }
         .active { display: flex; }
 
-        /* Horizontal Airplane Unit (X-Axis) */
+        /* HORIZONTAL PLANE UNIT */
         #plane-unit {
             position: relative;
             display: flex;
+            flex-direction: row; /* Horizontal X-Axis Alignment */
             align-items: center; 
             justify-content: center;
-            width: 100%;
+            width: fit-content;
             transform: translateX(-150vw);
         }
 
         .airplane {
-            font-size: 65px;
+            font-size: 70px;
             z-index: 30;
             filter: drop-shadow(2px 5px 8px rgba(0,0,0,0.1));
-            transform: rotate(0deg); /* Pure X-axis alignment */
-            margin-right: -5px;
+            transform: scaleX(-1); /* Points plane to the right */
         }
 
-        /* The Thread */
-        .thread {
-            width: 80px;
-            height: 2px;
-            background: #444;
+        /* WAVY THREAD */
+        .wavy-thread {
+            width: 100px;
+            height: 20px;
+            margin: 0 -10px;
             z-index: 20;
-            box-shadow: 0px 1px 2px rgba(0,0,0,0.2);
         }
 
         .glass-card {
@@ -93,17 +91,18 @@
             padding: 20px;
             border-radius: 15px;
             box-shadow: 0 15px 35px rgba(214, 48, 49, 0.1);
-            width: 300px;
+            width: 280px;
             text-align: center;
             border: 1px solid rgba(255, 255, 255, 0.3);
+            z-index: 25;
         }
 
         /* Flight Animations */
-        .fly-in-stop { animation: flyInStop 2.2s forwards cubic-bezier(0.25, 1, 0.5, 1); }
-        .fly-away { animation: flyAway 1.8s forwards ease-in; }
+        .fly-in-stop { animation: flyInStop 2.5s forwards cubic-bezier(0.25, 1, 0.5, 1); }
+        .fly-away { animation: flyAway 2s forwards ease-in; }
 
         @keyframes flyInStop {
-            0% { transform: translateX(-120vw); }
+            0% { transform: translateX(-150vw); }
             100% { transform: translateX(0); }
         }
 
@@ -126,7 +125,7 @@
         <iframe id="romanticMusic" width="0" height="0" src="https://www.youtube.com/embed/H9Hnisaqlns?enablejsapi=1" frameborder="0"></iframe>
     </div>
     
-    <div class="cloud cloud-small" style="top: 25%; animation-duration: 22s; opacity: 0.6;"></div>
+    <div class="cloud cloud-small" style="top: 20%; animation-duration: 25s; opacity: 0.5;"></div>
 
     <div id="page1" class="page active">
         <div class="glass-card">
@@ -147,7 +146,9 @@
     <div id="page3" class="page">
         <div id="plane-unit">
             <div class="airplane">✈️</div>
-            <div class="thread"></div>
+            <svg class="wavy-thread" viewBox="0 0 100 20">
+                <path d="M0,10 Q25,0 50,10 T100,10" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="4" />
+            </svg>
             <div class="glass-card">
                 <img id="displayImg" class="flashcard-img" src="pic1.jpeg">
                 <p id="displayMsg" style="color: #636e72; font-size: 0.9em; margin-top: 10px;"></p>
@@ -247,7 +248,7 @@
                     void unit.offsetWidth;
                     unit.classList.add('fly-in-stop');
                 } else nextPage(4);
-            }, 1800);
+            }, 2000);
         }
 
         function showQ() {
