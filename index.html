@@ -6,72 +6,153 @@
     <title>For My Meenamma</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        :root { --primary-red: #d63031; --bg-pink: #ffeef2; }
-        body, html { margin: 0; padding: 0; font-family: 'Poppins', sans-serif; height: 100%; overflow: hidden; background-color: var(--bg-pink); }
-        .page { display: none; height: 100vh; width: 100vw; position: absolute; flex-direction: column; align-items: center; justify-content: center; z-index: 10; }
+        :root {
+            --primary-red: #d63031;
+            --soft-pink: #fab1a0;
+            --bg-pink: #ffeef2;
+        }
+
+        body, html {
+            margin: 0; padding: 0;
+            font-family: 'Poppins', sans-serif;
+            height: 100%;
+            overflow: hidden;
+            background-color: var(--bg-pink);
+        }
+
+        .hearts-bg {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="%23ff7675" opacity="0.3"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>');
+            background-size: 80px 80px; z-index: 1; animation: moveBg 20s linear infinite;
+        }
+
+        @keyframes moveBg { from { background-position: 0 0; } to { background-position: 80px 80px; } }
+
+        .page {
+            display: none; height: 100vh; width: 100vw; position: absolute;
+            flex-direction: column; align-items: center; justify-content: center; z-index: 10;
+        }
         .active { display: flex; }
-        .glass-card { background: rgba(255, 255, 255, 0.98); padding: 20px; border-radius: 20px; box-shadow: 0 15px 35px rgba(214, 48, 49, 0.1); width: 300px; text-align: center; }
-        
-        /* Debug Box Styling */
-        #debugInfo { position: fixed; top: 10px; left: 10px; background: rgba(0,0,0,0.7); color: #0f0; padding: 10px; font-size: 10px; z-index: 9999; pointer-events: none; border-radius: 5px; }
-        
-        button { background: var(--primary-red); color: white; border: none; padding: 12px 30px; border-radius: 50px; font-weight: 600; cursor: pointer; margin-top: 15px; }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95); padding: 30px; border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05); width: 320px; text-align: center;
+        }
+
+        #plane-unit {
+            display: flex; flex-direction: row; align-items: center; justify-content: center;
+            transform: translateX(-150vw);
+        }
+
+        .airplane { font-size: 70px; }
+        .wavy-thread { width: 80px; height: 30px; margin: 0 -5px; }
+        .thread-path { fill: none; stroke: #444; stroke-width: 2.5; stroke-dasharray: 4, 4; animation: towWave 1.5s infinite; }
+        @keyframes towWave { 0%, 100% { d: path("M0,15 Q20,5 40,15 T80,15"); } 50% { d: path("M0,15 Q20,25 40,15 T80,15"); } }
+
+        .fly-in-stop { animation: flyInStop 2.8s forwards ease-out; }
+        .fly-away { animation: flyAway 2s forwards ease-in; }
+        @keyframes flyInStop { 0% { transform: translateX(-150vw); } 100% { transform: translateX(0); } }
+        @keyframes flyAway { 0% { transform: translateX(0); } 100% { transform: translateX(160vw); } }
+
+        button { background: var(--primary-red); color: white; border: none; padding: 12px 25px; border-radius: 10px; font-weight: 600; cursor: pointer; margin-top: 15px; }
+        input { width: 80%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 8px; outline: none; }
+        .flashcard-img { width: 100%; border-radius: 10px; border: 4px solid white; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
     </style>
 </head>
 <body>
 
-    <div id="debugInfo">Music Status: Initializing...</div>
-
+    <div class="hearts-bg"></div>
+    
     <audio id="bgMusic" loop preload="auto">
         <source src="music.mp3" type="audio/mpeg">
     </audio>
 
     <div id="page1" class="page active">
         <div class="glass-card">
-            <h1>Happy Valentine's Day</h1>
+            <h1 style="color: var(--primary-red);">Happy Valentine's Day</h1>
             <button onclick="startExperience()">START</button>
         </div>
     </div>
 
-    <script>
-        const audio = document.getElementById('bgMusic');
-        const debug = document.getElementById('debugInfo');
+    <div id="page2" class="page">
+        <div class="glass-card">
+            <h2 style="font-size: 2em; margin-bottom: 20px;">Meenamma's Login</h2>
+            <div style="display: flex; align-items: center; justify-content: center; gap: 10px;">
+                <input type="text" id="userInput" placeholder="meenamma">
+                <button onclick="validateLogin()" style="margin-top:0;">Login</button>
+            </div>
+        </div>
+    </div>
 
-        // Check if file even exists
-        audio.addEventListener('error', function(e) {
-            debug.innerText = "Music Error: File 'music.mp3' not found in repository!";
-            debug.style.color = "red";
-        });
+    <div id="page3" class="page">
+        <div id="plane-unit">
+            <div class="glass-card">
+                <img id="displayImg" class="flashcard-img" src="pic1.jpeg">
+                <p id="displayMsg" style="margin-top:15px; color:#555;"></p>
+                <button onclick="triggerNextPlane()">Next Memory</button>
+            </div>
+            <svg class="wavy-thread" viewBox="0 0 80 30"><path class="thread-path" d="M0,15 Q20,5 40,15 T80,15" /></svg>
+            <div class="airplane">✈️</div>
+        </div>
+    </div>
+
+    <script>
+        const memories = [
+            { src: "pic1.jpeg", msg: "I love your smile in this one!" },
+            { src: "pic2.jpeg", msg: "This moment felt like a dream." },
+            { src: "pic 3.jpeg", msg: "Looking at you is my favorite thing." },
+            { src: "pic4.jpeg", msg: "Every second with you is precious." },
+            { src: "pic5.jpeg", msg: "You look so beautiful here." },
+            { src: "pic6.jpeg", msg: "My favorite person in the world." }
+        ];
+        let memIdx = 0;
 
         function startExperience() {
-            debug.innerText = "Music Status: Attempting to play...";
-            
-            audio.play().then(() => {
-                debug.innerText = "Music Status: Playing Successfully!";
-                debug.style.color = "#0f0";
-            }).catch(error => {
-                debug.innerText = "Music Status: Blocked by Browser. Try clicking Login next.";
-                debug.style.color = "orange";
-            });
-
+            // Unmute and play audio on first user click
+            const audio = document.getElementById('bgMusic');
+            audio.play().catch(e => console.log("Audio block active"));
             nextPage(2);
         }
 
         function nextPage(n) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            const next = document.getElementById('page'+n);
-            if(next) next.classList.add('active');
+            document.getElementById('page'+n).classList.add('active');
+            if(n === 3) {
+                updateContent();
+                document.getElementById('plane-unit').classList.add('fly-in-stop');
+            }
         }
 
-        // Add dummy Login page for testing
-        document.body.innerHTML += `
-            <div id="page2" class="page">
-                <div class="glass-card">
-                    <h2>Meenamma's Login</h2>
-                    <input type="text" placeholder="Username">
-                    <button onclick="alert('Checking...');">Login</button>
-                </div>
-            </div>`;
+        function validateLogin() {
+            const input = document.getElementById('userInput').value.toLowerCase();
+            if(input === "meenamma") {
+                nextPage(3); // This removes the "Checking..." alert and goes straight to memories
+            } else {
+                alert("Incorrect username, my love.");
+            }
+        }
+
+        function updateContent() {
+            document.getElementById('displayImg').src = memories[memIdx].src;
+            document.getElementById('displayMsg').innerText = memories[memIdx].msg;
+        }
+
+        function triggerNextPlane() {
+            const unit = document.getElementById('plane-unit');
+            unit.classList.remove('fly-in-stop');
+            unit.classList.add('fly-away');
+            setTimeout(() => {
+                memIdx++;
+                if (memIdx < memories.length) {
+                    updateContent();
+                    unit.classList.remove('fly-away');
+                    void unit.offsetWidth;
+                    unit.classList.add('fly-in-stop');
+                } else {
+                    alert("Ready for the quiz?");
+                }
+            }, 2000);
+        }
     </script>
 </body>
 </html>
