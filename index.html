@@ -21,7 +21,7 @@
             background-color: var(--bg-pink);
         }
 
-        /* Hearts Background */
+        /* Moving Hearts Background */
         .hearts-bg {
             position: fixed;
             top: 0; left: 0;
@@ -34,7 +34,7 @@
 
         @keyframes moveBg { from { background-position: 0 0; } to { background-position: 80px 80px; } }
 
-        /* Clouds */
+        /* Drifting Clouds */
         .cloud {
             position: absolute;
             background: var(--cloud-white);
@@ -60,11 +60,11 @@
         }
         .active { display: flex; }
 
-        /* HORIZONTAL PLANE UNIT */
+        /* THE PLANE UNIT */
         #plane-unit {
             position: relative;
             display: flex;
-            flex-direction: row; /* Horizontal X-Axis Alignment */
+            flex-direction: row; 
             align-items: center; 
             justify-content: center;
             width: fit-content;
@@ -72,34 +72,48 @@
         }
 
         .airplane {
-            font-size: 70px;
-            z-index: 30;
+            font-size: 75px;
+            z-index: 35;
             filter: drop-shadow(2px 5px 8px rgba(0,0,0,0.1));
-            transform: scaleX(-1); /* Points plane to the right */
+            transform: scaleX(-1); /* Points plane forward */
         }
 
-        /* WAVY THREAD */
+        /* THE REALISTIC WAVY THREAD */
         .wavy-thread {
-            width: 100px;
-            height: 20px;
-            margin: 0 -10px;
+            width: 120px;
+            height: 40px;
+            margin: 0 -15px;
             z-index: 20;
         }
 
-        .glass-card {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 15px 35px rgba(214, 48, 49, 0.1);
-            width: 280px;
-            text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            z-index: 25;
+        .thread-path {
+            fill: none;
+            stroke: #555;
+            stroke-width: 2.5;
+            stroke-linecap: round;
+            stroke-dasharray: 5, 5; /* Makes it look like twisted rope */
+            animation: waveMotion 2s ease-in-out infinite;
         }
 
-        /* Flight Animations */
-        .fly-in-stop { animation: flyInStop 2.5s forwards cubic-bezier(0.25, 1, 0.5, 1); }
-        .fly-away { animation: flyAway 2s forwards ease-in; }
+        @keyframes waveMotion {
+            0%, 100% { d: path("M0,20 Q30,5 60,20 T120,20"); }
+            50% { d: path("M0,20 Q30,35 60,20 T120,20"); }
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.98);
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(214, 48, 49, 0.12);
+            width: 300px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            z-index: 30;
+        }
+
+        /* FLIGHT TIMING */
+        .fly-in-stop { animation: flyInStop 3s forwards cubic-bezier(0.2, 0.8, 0.2, 1); }
+        .fly-away { animation: flyAway 2.2s forwards ease-in; }
 
         @keyframes flyInStop {
             0% { transform: translateX(-150vw); }
@@ -108,13 +122,14 @@
 
         @keyframes flyAway {
             0% { transform: translateX(0); }
-            100% { transform: translateX(150vw); }
+            100% { transform: translateX(160vw); }
         }
 
-        button { background: var(--primary-red); color: white; border: none; padding: 12px 30px; border-radius: 50px; font-weight: 600; cursor: pointer; margin-top: 15px; }
-        input { width: 85%; padding: 12px; margin: 10px 0; border: 2px solid var(--soft-pink); border-radius: 12px; }
-        .flashcard-img { width: 100%; max-height: 250px; object-fit: cover; border-radius: 10px; border: 4px solid white; }
-        #noBtn { position: absolute; background: #95a5a6; z-index: 100; }
+        button { background: var(--primary-red); color: white; border: none; padding: 12px 30px; border-radius: 50px; font-weight: 600; cursor: pointer; transition: 0.3s; margin-top: 15px; }
+        button:hover { transform: scale(1.05); background: #b32021; }
+        input { width: 85%; padding: 12px; margin: 10px 0; border: 2px solid var(--soft-pink); border-radius: 12px; outline: none; }
+        .flashcard-img { width: 100%; max-height: 250px; object-fit: cover; border-radius: 12px; border: 5px solid white; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        #noBtn { position: absolute; background: #95a5a6; z-index: 100; font-size: 14px; padding: 8px 20px; }
         #music-container { visibility: hidden; position: absolute; }
     </style>
 </head>
@@ -125,18 +140,19 @@
         <iframe id="romanticMusic" width="0" height="0" src="https://www.youtube.com/embed/H9Hnisaqlns?enablejsapi=1" frameborder="0"></iframe>
     </div>
     
-    <div class="cloud cloud-small" style="top: 20%; animation-duration: 25s; opacity: 0.5;"></div>
+    <div class="cloud cloud-small" style="top: 15%; animation-duration: 25s; opacity: 0.5;"></div>
+    <div class="cloud cloud-large" style="top: 70%; animation-duration: 40s; opacity: 0.3; left: -200px;"></div>
 
     <div id="page1" class="page active">
         <div class="glass-card">
-            <h1>Happy Valentine's Day</h1>
+            <h1 style="color: var(--primary-red); font-size: 1.8em;">Happy Valentine's Day</h1>
             <button onclick="startExperience()">START</button>
         </div>
     </div>
 
     <div id="page2" class="page">
         <div class="glass-card">
-            <h2>Meenamma's Login</h2>
+            <h2 style="color: var(--primary-red);">Meenamma's Login</h2>
             <input type="text" id="userInput" placeholder="Username">
             <input type="password" id="passInput" placeholder="Password">
             <button onclick="validateLogin()">Login</button>
@@ -146,8 +162,8 @@
     <div id="page3" class="page">
         <div id="plane-unit">
             <div class="airplane">✈️</div>
-            <svg class="wavy-thread" viewBox="0 0 100 20">
-                <path d="M0,10 Q25,0 50,10 T100,10" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="4" />
+            <svg class="wavy-thread" viewBox="0 0 120 40">
+                <path class="thread-path" d="M0,20 Q30,5 60,20 T120,20" />
             </svg>
             <div class="glass-card">
                 <img id="displayImg" class="flashcard-img" src="pic1.jpeg">
@@ -159,17 +175,17 @@
 
     <div id="page4" class="page">
         <div class="glass-card">
-            <h2>Do you know me?</h2>
-            <p id="questionText"></p>
-            <input type="text" id="answerInput" placeholder="Answer...">
+            <h2 style="color: var(--primary-red);">Do you know me?</h2>
+            <p id="questionText" style="font-weight: 600;"></p>
+            <input type="text" id="answerInput" placeholder="Type answer here...">
             <button onclick="checkAnswer()">Submit</button>
         </div>
     </div>
 
     <div id="page5" class="page">
         <div class="glass-card">
-            <span style="font-size: 50px;">🌹</span>
-            <h1>Will you marry me?</h1>
+            <span style="font-size: 60px;">🌹</span>
+            <h1 style="color: var(--primary-red);">Will you marry me?</h1>
             <div style="position: relative; height: 120px; width: 100%;">
                 <button onclick="nextPage(6)" style="width: 100px;">YES</button>
                 <button id="noBtn" onmouseover="dodge()">No</button>
@@ -179,8 +195,8 @@
 
     <div id="page6" class="page">
         <div class="glass-card">
-            <h1>You are already my wife ❤️</h1>
-            <div style="font-size: 40px;">🌹🌹🌹🌹🌹</div>
+            <h1 style="color: var(--primary-red);">"You are already my wife ❤️"</h1>
+            <div style="font-size: 45px; letter-spacing: 10px;">🌹🌹🌹🌹🌹</div>
         </div>
     </div>
 
@@ -227,7 +243,7 @@
         function validateLogin() {
             if(document.getElementById('userInput').value.toLowerCase() === USER && 
                document.getElementById('passInput').value === PASS) nextPage(3);
-            else alert("Try again, my love!");
+            else alert("Check your credentials, my love!");
         }
 
         function updateContent() {
@@ -248,7 +264,7 @@
                     void unit.offsetWidth;
                     unit.classList.add('fly-in-stop');
                 } else nextPage(4);
-            }, 2000);
+            }, 2200);
         }
 
         function showQ() {
@@ -257,7 +273,7 @@
                 document.getElementById('answerInput').value = "";
             } else {
                 if(score >= 3) nextPage(5);
-                else { alert("Try again!"); qIdx=0; score=0; showQ(); }
+                else { alert("Score: " + score + "/5. Let's try again!"); qIdx=0; score=0; showQ(); }
             }
         }
 
