@@ -21,6 +21,7 @@
             background-color: var(--bg-pink);
         }
 
+        /* Hearts Background */
         .hearts-bg {
             position: fixed;
             top: 0; left: 0;
@@ -33,6 +34,7 @@
 
         @keyframes moveBg { from { background-position: 0 0; } to { background-position: 80px 80px; } }
 
+        /* Clouds */
         .cloud {
             position: absolute;
             background: var(--cloud-white);
@@ -56,6 +58,7 @@
         }
         .active { display: flex; }
 
+        /* Plane Unit - Horizontal leading from Right */
         #plane-unit {
             position: relative;
             display: flex;
@@ -66,9 +69,20 @@
             transform: translateX(-150vw);
         }
 
-        .airplane { font-size: 70px; z-index: 35; filter: drop-shadow(2px 5px 8px rgba(0,0,0,0.1)); }
+        .airplane {
+            font-size: 70px;
+            z-index: 35;
+            filter: drop-shadow(2px 5px 8px rgba(0,0,0,0.1));
+            transform: rotate(0deg); 
+            margin-left: -10px;
+        }
 
-        .wavy-thread { width: 80px; height: 30px; margin: 0 -5px; z-index: 20; }
+        .wavy-thread {
+            width: 80px;
+            height: 30px;
+            margin: 0 -5px;
+            z-index: 20;
+        }
 
         .thread-path {
             fill: none;
@@ -95,16 +109,40 @@
             z-index: 30;
         }
 
+        /* Motion Animations */
         .fly-in-stop { animation: flyInStop 2.8s forwards cubic-bezier(0.19, 1, 0.22, 1); }
         .fly-away { animation: flyAway 2s forwards ease-in; }
 
-        @keyframes flyInStop { 0% { transform: translateX(-150vw); } 100% { transform: translateX(0); } }
-        @keyframes flyAway { 0% { transform: translateX(0); } 100% { transform: translateX(160vw); } }
+        @keyframes flyInStop {
+            0% { transform: translateX(-150vw); }
+            100% { transform: translateX(0); }
+        }
+
+        @keyframes flyAway {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(160vw); }
+        }
 
         button { background: var(--primary-red); color: white; border: none; padding: 12px 30px; border-radius: 50px; font-weight: 600; cursor: pointer; transition: 0.3s; margin-top: 15px; }
         input { width: 85%; padding: 12px; margin: 10px 0; border: 2px solid var(--soft-pink); border-radius: 12px; outline: none; }
-        .flashcard-img { width: 100%; max-height: 250px; object-fit: cover; border-radius: 12px; border: 5px solid white; }
+        .flashcard-img { width: 100%; max-height: 250px; object-fit: cover; border-radius: 12px; border: 5px solid white; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
         #noBtn { position: absolute; background: #95a5a6; z-index: 100; font-size: 14px; padding: 8px 20px; }
+        
+        #musicToggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+            background: white;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid var(--soft-pink);
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -112,8 +150,10 @@
     <div class="hearts-bg"></div>
     
     <audio id="bgMusic" loop>
-        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+        <source src="music.mp3" type="audio/mpeg">
     </audio>
+
+    <div id="musicToggle" onclick="forcePlay()">🎵</div>
 
     <div class="cloud cloud-small" style="top: 15%; animation-duration: 25s; opacity: 0.5;"></div>
 
@@ -126,7 +166,7 @@
 
     <div id="page2" class="page">
         <div class="glass-card">
-            <h2>Meenamma's Login</h2>
+            <h2 style="color: var(--primary-red);">Meenamma's Login</h2>
             <input type="text" id="userInput" placeholder="Username">
             <input type="password" id="passInput" placeholder="Password">
             <button onclick="validateLogin()">Login</button>
@@ -169,7 +209,7 @@
 
     <div id="page6" class="page">
         <div class="glass-card">
-            <h1>"You are already my wife ❤️"</h1>
+            <h1 style="color: var(--primary-red);">"You are already my wife ❤️"</h1>
             <div style="font-size: 45px; letter-spacing: 10px;">🌹🌹🌹🌹🌹</div>
         </div>
     </div>
@@ -196,10 +236,16 @@
         let memIdx = 0, qIdx = 0, score = 0;
 
         function startExperience() {
-            // DIRECT START OF AUDIO
             const audio = document.getElementById('bgMusic');
-            audio.play().catch(e => console.log("Audio play failed:", e));
+            audio.play().catch(() => {
+                document.getElementById('musicToggle').style.display = 'flex';
+            });
             nextPage(2);
+        }
+
+        function forcePlay() {
+            document.getElementById('bgMusic').play();
+            document.getElementById('musicToggle').style.display = 'none';
         }
 
         function nextPage(n) {
@@ -215,7 +261,7 @@
         function validateLogin() {
             if(document.getElementById('userInput').value.toLowerCase() === USER && 
                document.getElementById('passInput').value === PASS) nextPage(3);
-            else alert("Check your credentials!");
+            else alert("Try again, my love!");
         }
 
         function updateContent() {
@@ -244,7 +290,7 @@
                 document.getElementById('answerInput').value = "";
             } else {
                 if(score >= 3) nextPage(5);
-                else { alert("Score: " + score + "/5. Let's try again!"); qIdx=0; score=0; showQ(); }
+                else { alert("Try again!"); qIdx=0; score=0; showQ(); }
             }
         }
 
