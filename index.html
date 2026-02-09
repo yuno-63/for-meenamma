@@ -21,7 +21,7 @@
             background-color: var(--bg-pink);
         }
 
-        /* Moving Hearts Background */
+        /* Hearts Background */
         .hearts-bg {
             position: fixed;
             top: 0; left: 0;
@@ -58,7 +58,7 @@
         }
         .active { display: flex; }
 
-        /* PLANE UNIT - Airplane on the Right pulling from the front */
+        /* PLANE UNIT - Plane on the right pulling the card */
         #plane-unit {
             position: relative;
             display: flex;
@@ -73,7 +73,7 @@
             font-size: 70px;
             z-index: 35;
             filter: drop-shadow(2px 5px 8px rgba(0,0,0,0.1));
-            /* Points plane to the right (Normal orientation) */
+            /* Facing right */
             transform: rotate(0deg); 
             margin-left: -10px;
         }
@@ -89,7 +89,7 @@
         .thread-path {
             fill: none;
             stroke: #444;
-            stroke-width: 2;
+            stroke-width: 2.5;
             stroke-linecap: round;
             stroke-dasharray: 4, 4;
             animation: towWave 1.5s ease-in-out infinite;
@@ -271,7 +271,7 @@
                 document.getElementById('answerInput').value = "";
             } else {
                 if(score >= 3) nextPage(5);
-                else { alert("Score: " + score + "/5. Let's try again!"); qIdx=0; score=0; showQ(); }
+                else { alert("Try again!"); qIdx=0; score=0; showQ(); }
             }
         }
 
