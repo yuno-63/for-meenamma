@@ -32,7 +32,7 @@
             animation: moveBg 20s linear infinite;
         }
 
-        /* Animated Clouds */
+        /* Clouds */
         .cloud {
             position: absolute;
             background: var(--cloud-white);
@@ -40,31 +40,16 @@
             z-index: 2;
             animation: drift linear infinite;
         }
-
-        .cloud::after, .cloud::before {
-            content: '';
-            position: absolute;
-            background: var(--cloud-white);
-            border-radius: 50%;
-        }
-
+        .cloud::after, .cloud::before { content: ''; position: absolute; background: var(--cloud-white); border-radius: 50%; }
         .cloud-small { width: 100px; height: 35px; }
         .cloud-small::after { width: 50px; height: 50px; top: -25px; left: 15px; }
         .cloud-small::before { width: 40px; height: 40px; top: -15px; left: 45px; }
-
         .cloud-large { width: 200px; height: 60px; }
         .cloud-large::after { width: 100px; height: 100px; top: -50px; left: 30px; }
         .cloud-large::before { width: 80px; height: 80px; top: -30px; left: 90px; }
 
-        @keyframes drift {
-            from { transform: translateX(-250px); }
-            to { transform: translateX(110vw); }
-        }
-
-        @keyframes moveBg {
-            from { background-position: 0 0; }
-            to { background-position: 80px 80px; }
-        }
+        @keyframes drift { from { transform: translateX(-250px); } to { transform: translateX(110vw); } }
+        @keyframes moveBg { from { background-position: 0 0; } to { background-position: 80px 80px; } }
 
         .page {
             display: none;
@@ -76,95 +61,70 @@
             justify-content: center;
             z-index: 10;
         }
-
         .active { display: flex; }
 
         .glass-card {
             background: rgba(255, 255, 255, 0.95);
-            padding: 30px;
-            border-radius: 25px;
-            box-shadow: 0 15px 35px rgba(214, 48, 49, 0.15);
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(214, 48, 49, 0.1);
             width: 85%;
-            max-width: 400px;
+            max-width: 380px;
             text-align: center;
             border: 1px solid rgba(255, 255, 255, 0.3);
         }
 
-        /* Airplane Animation */
-        #plane-container {
+        #plane-unit {
             position: relative;
-            width: 100%;
             display: flex;
             flex-direction: column;
             align-items: center;
+            width: 100%;
         }
 
         .airplane {
-            font-size: 60px;
-            margin-bottom: -10px;
-            transform: rotate(5deg);
+            font-size: 55px;
+            z-index: 20;
             filter: drop-shadow(2px 5px 8px rgba(0,0,0,0.1));
+        }
+
+        .thread {
+            width: 2px;
+            height: 40px;
+            background: rgba(0,0,0,0.2);
+            margin: -5px 0;
             z-index: 15;
         }
 
-        .fly-in { animation: flyIn 1.5s forwards cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        .fly-out { animation: flyOut 1.2s forwards ease-in; }
+        .fly-in { animation: flyIn 1.8s forwards cubic-bezier(0.19, 1, 0.22, 1); }
+        .fly-out { animation: flyOut 1.5s forwards ease-in; }
 
-        @keyframes flyIn {
-            0% { transform: translateX(-150vw) translateY(50px) rotate(15deg); }
-            100% { transform: translateX(0) translateY(0) rotate(0deg); }
-        }
+        @keyframes flyIn { 0% { transform: translateX(-150vw); } 100% { transform: translateX(0); } }
+        @keyframes flyOut { 0% { transform: translateX(0); } 100% { transform: translateX(150vw); } }
 
-        @keyframes flyOut {
-            0% { transform: translateX(0) rotate(0deg); }
-            100% { transform: translateX(150vw) translateY(-100px) rotate(-10deg); }
-        }
-
-        button {
-            background: var(--primary-red);
-            color: white;
-            border: none;
-            padding: 14px 40px;
-            border-radius: 50px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.3s;
-            margin-top: 15px;
-        }
-
-        input {
-            width: 90%;
-            padding: 12px;
-            margin: 10px 0;
-            border: 2px solid var(--soft-pink);
-            border-radius: 12px;
-        }
-
-        .flashcard-img {
-            width: 100%;
-            max-height: 300px;
-            object-fit: cover;
-            border-radius: 15px;
-            border: 5px solid white;
-        }
-
+        button { background: var(--primary-red); color: white; border: none; padding: 12px 35px; border-radius: 50px; font-weight: 600; cursor: pointer; transition: 0.3s; margin-top: 15px; }
+        input { width: 90%; padding: 12px; margin: 10px 0; border: 2px solid var(--soft-pink); border-radius: 12px; }
+        .flashcard-img { width: 100%; max-height: 280px; object-fit: cover; border-radius: 12px; border: 4px solid white; }
         #noBtn { position: absolute; background: #95a5a6; z-index: 100; }
+        
+        /* Hide the music player */
+        #music-container { display: none; }
     </style>
 </head>
 <body>
 
     <div class="hearts-bg"></div>
+    <div id="music-container">
+        <iframe id="romanticMusic" width="0" height="0" src="https://www.youtube.com/embed/H9Hnisaqlns?enablejsapi=1" frameborder="0"></iframe>
+    </div>
     
-    <div class="cloud cloud-large" style="top: 10%; animation-duration: 25s; opacity: 0.5;"></div>
-    <div class="cloud cloud-small" style="top: 25%; animation-duration: 18s; opacity: 0.8;"></div>
-    <div class="cloud cloud-large" style="top: 60%; animation-duration: 35s; opacity: 0.4;"></div>
-    <div class="cloud cloud-small" style="top: 80%; animation-duration: 22s; opacity: 0.6;"></div>
+    <div class="cloud cloud-large" style="top: 15%; animation-duration: 30s; opacity: 0.4;"></div>
+    <div class="cloud cloud-small" style="top: 30%; animation-duration: 20s; opacity: 0.7;"></div>
 
     <div id="page1" class="page active">
         <div class="glass-card">
             <h1>Happy Valentine's Day</h1>
-            <button onclick="nextPage(2)">START</button>
+            <button onclick="startExperience()">START</button>
         </div>
     </div>
 
@@ -178,12 +138,13 @@
     </div>
 
     <div id="page3" class="page">
-        <div id="plane-container" class="fly-in">
+        <div id="plane-unit" class="fly-in">
             <div class="airplane">✈️</div>
+            <div class="thread"></div>
             <div class="glass-card">
                 <img id="displayImg" class="flashcard-img" src="pic1.jpeg">
-                <p id="displayMsg" style="color: #636e72; font-style: italic;"></p>
-                <button onclick="triggerPlaneTransition()">Next Memory</button>
+                <p id="displayMsg" style="color: #636e72; font-size: 0.9em; margin-top: 10px;"></p>
+                <button onclick="triggerDragNext()">Next Memory</button>
             </div>
         </div>
     </div>
@@ -191,8 +152,8 @@
     <div id="page4" class="page">
         <div class="glass-card">
             <h2>Do you know me?</h2>
-            <p id="questionText" style="font-weight: 600;"></p>
-            <input type="text" id="answerInput" placeholder="Your answer...">
+            <p id="questionText"></p>
+            <input type="text" id="answerInput" placeholder="Answer...">
             <button onclick="checkAnswer()">Submit</button>
         </div>
     </div>
@@ -201,8 +162,8 @@
         <div class="glass-card">
             <span style="font-size: 50px;">🌹</span>
             <h1>Will you marry me?</h1>
-            <div style="position: relative; height: 150px; width: 100%;">
-                <button onclick="nextPage(6)" style="width: 120px;">YES</button>
+            <div style="position: relative; height: 120px; width: 100%;">
+                <button onclick="nextPage(6)" style="width: 100px;">YES</button>
                 <button id="noBtn" onmouseover="dodge()">No</button>
             </div>
         </div>
@@ -238,63 +199,66 @@
 
         let memIdx = 0, qIdx = 0, score = 0;
 
+        function startExperience() {
+            // Trigger music
+            const iframe = document.getElementById('romanticMusic');
+            iframe.src += "&autoplay=1";
+            nextPage(2);
+        }
+
         function nextPage(n) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById('page'+n).classList.add('active');
-            if(n === 3) updateFlashcard();
-            if(n === 4) showQuestion();
+            if(n === 3) updateContent();
+            if(n === 4) showQ();
         }
 
         function validateLogin() {
             if(document.getElementById('userInput').value.toLowerCase() === USER && 
-               document.getElementById('passInput').value === PASS) {
-                nextPage(3);
-            } else { alert("Only Meenamma can enter!"); }
+               document.getElementById('passInput').value === PASS) nextPage(3);
+            else alert("Try again, my love!");
         }
 
-        function updateFlashcard() {
+        function updateContent() {
             document.getElementById('displayImg').src = memories[memIdx].src;
             document.getElementById('displayMsg').innerText = memories[memIdx].msg;
         }
 
-        function triggerPlaneTransition() {
-            const container = document.getElementById('plane-container');
-            container.classList.remove('fly-in');
-            container.classList.add('fly-out');
+        function triggerDragNext() {
+            const unit = document.getElementById('plane-unit');
+            unit.classList.remove('fly-in');
+            unit.classList.add('fly-out');
 
             setTimeout(() => {
                 memIdx++;
                 if (memIdx < memories.length) {
-                    updateFlashcard();
-                    container.classList.remove('fly-out');
-                    void container.offsetWidth; // Trigger reflow
-                    container.classList.add('fly-in');
-                } else {
-                    nextPage(4);
-                }
-            }, 1200);
+                    updateContent();
+                    unit.classList.remove('fly-out');
+                    void unit.offsetWidth;
+                    unit.classList.add('fly-in');
+                } else nextPage(4);
+            }, 1500);
         }
 
-        function showQuestion() {
+        function showQ() {
             if(qIdx < questions.length) {
                 document.getElementById('questionText').innerText = questions[qIdx].q;
                 document.getElementById('answerInput').value = "";
             } else {
                 if(score >= 3) nextPage(5);
-                else { alert("Try again, my love!"); qIdx=0; score=0; showQuestion(); }
+                else { alert("Score: "+score+"/5. Try again!"); qIdx=0; score=0; showQ(); }
             }
         }
 
         function checkAnswer() {
-            const userAns = document.getElementById('answerInput').value.trim().toLowerCase();
-            if(userAns === questions[qIdx].a.toLowerCase()) score++;
-            qIdx++; showQuestion();
+            if(document.getElementById('answerInput').value.trim().toLowerCase() === questions[qIdx].a.toLowerCase()) score++;
+            qIdx++; showQ();
         }
 
         function dodge() {
-            const btn = document.getElementById('noBtn');
-            btn.style.left = Math.random() * (window.innerWidth - 150) + 'px';
-            btn.style.top = Math.random() * (window.innerHeight - 150) + 'px';
+            const b = document.getElementById('noBtn');
+            b.style.left = Math.random() * (window.innerWidth - 150) + 'px';
+            b.style.top = Math.random() * (window.innerHeight - 150) + 'px';
         }
     </script>
 </body>
