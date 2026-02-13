@@ -21,23 +21,22 @@
             background-color: var(--bg-white);
         }
 
-        /* Floating Hearts */
         #hearts-container {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none; z-index: 1;
         }
         .floating-heart {
             position: absolute; color: var(--heart-color);
-            opacity: 0.6; user-select: none;
+            opacity: 0.5; user-select: none;
             animation: floatAround linear infinite;
         }
 
         @keyframes floatAround {
             0% { transform: translate(0, 0) rotate(0deg); }
-            25% { transform: translate(50px, 80px) rotate(90deg); }
-            50% { transform: translate(100px, 0px) rotate(180deg); }
-            75% { transform: translate(50px, -80px) rotate(270deg); }
-            100% { transform: translate(0, 0) rotate(360deg); }
+            25% { transform: translate(60px, 100px) rotate(45deg); }
+            50% { transform: translate(120px, 0px) rotate(90deg); }
+            75% { transform: translate(60px, -100px) rotate(135deg); }
+            100% { transform: translate(0, 0) rotate(180deg); }
         }
 
         .page {
@@ -47,18 +46,16 @@
         .active { display: flex; }
 
         .glass-card {
-            background: rgba(255, 255, 255, 0.95); padding: 30px; border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 320px; text-align: center;
+            background: rgba(255, 255, 255, 0.96); padding: 30px; border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08); width: 340px; text-align: center;
         }
 
-        /* Final Message Style */
         .special-message {
             color: var(--primary-red);
             font-weight: 600;
-            font-size: 1.1em;
+            font-size: 1.05em;
             margin-top: 20px;
-            line-height: 1.5;
-            padding: 0 10px;
+            line-height: 1.6;
         }
 
         #plane-unit {
@@ -66,8 +63,8 @@
             transform: translateX(-150vw);
         }
 
-        .airplane { font-size: 70px; }
-        .wavy-thread { width: 80px; height: 30px; margin: 0 -5px; }
+        .airplane { font-size: 75px; }
+        .wavy-thread { width: 85px; height: 35px; margin: 0 -5px; }
         .thread-path { fill: none; stroke: #444; stroke-width: 2.5; stroke-dasharray: 4, 4; animation: towWave 1.5s infinite; }
         @keyframes towWave { 0%, 100% { d: path("M0,15 Q20,5 40,15 T80,15"); } 50% { d: path("M0,15 Q20,25 40,15 T80,15"); } }
 
@@ -77,15 +74,14 @@
         @keyframes flyAway { 0% { transform: translateX(0); } 100% { transform: translateX(160vw); } }
 
         button { background: var(--primary-red); color: white; border: none; padding: 12px 25px; border-radius: 10px; font-weight: 600; cursor: pointer; margin-top: 15px; }
-        input { width: 80%; padding: 12px; margin: 8px 0; border: 1px solid #ccc; border-radius: 8px; outline: none; }
-        .flashcard-img { width: 100%; border-radius: 10px; border: 4px solid white; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        input { width: 85%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; outline: none; }
+        .flashcard-img { width: 100%; border-radius: 12px; border: 5px solid white; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
         
-        /* The Jumpy No Button */
         #noBtn { 
-            position: fixed; /* Fixed so it can jump anywhere on screen */
+            position: fixed; 
             background: #95a5a6; 
             z-index: 100; 
-            transition: all 0.2s ease;
+            transition: all 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
     </style>
 </head>
@@ -125,7 +121,7 @@
     <div id="page4" class="page">
         <div class="glass-card">
             <h2 style="color: var(--primary-red);">Do you know me?</h2>
-            <p id="questionText" style="font-weight: 600;"></p>
+            <p id="questionText" style="font-weight: 600; margin-bottom: 10px;"></p>
             <input type="text" id="answerInput" placeholder="Your answer...">
             <button onclick="checkAnswer()">Submit</button>
         </div>
@@ -135,7 +131,7 @@
         <div class="glass-card">
             <span style="font-size: 60px;">🌹</span>
             <h1 style="color: var(--primary-red);">Will you marry me?</h1>
-            <div style="height: 100px; width: 100%; display: flex; justify-content: center; align-items: center; gap: 20px;">
+            <div style="height: 100px; width: 100%; display: flex; justify-content: center; align-items: center; gap: 25px;">
                 <button onclick="nextPage(6)" style="width: 100px;">YES</button>
                 <button id="noBtn" onmouseover="dodge()" onclick="dodge()">No</button>
             </div>
@@ -143,9 +139,9 @@
     </div>
 
     <div id="page6" class="page">
-        <div class="glass-card" style="width: 400px;">
+        <div class="glass-card" style="width: 420px;">
             <h1 style="color: var(--primary-red);">You are already my wife ❤️</h1>
-            <div style="font-size: 30px;">🌹🌹🌹🌹🌹</div>
+            <div style="font-size: 30px; letter-spacing: 5px;">🌹🌹🌹🌹🌹</div>
             <p class="special-message">
                 "I may not be perfect, and life may not always be easy, but one thing you’ll never have to doubt is how deeply I care for you. No matter where life takes us, I’ll always stand beside you, choosing you, loving you, and reminding you that you’re never alone.❤️"
             </p>
@@ -155,14 +151,14 @@
     <script>
         function createHearts() {
             const container = document.getElementById('hearts-container');
-            for (let i = 0; i < 20; i++) {
+            for (let i = 0; i < 25; i++) {
                 const heart = document.createElement('div');
                 heart.className = 'floating-heart';
                 heart.innerHTML = '❤';
                 heart.style.left = Math.random() * 100 + 'vw';
                 heart.style.top = Math.random() * 100 + 'vh';
-                heart.style.fontSize = (Math.random() * 20 + 10) + 'px';
-                heart.style.animationDuration = (Math.random() * 8 + 4) + 's';
+                heart.style.fontSize = (Math.random() * 35 + 20) + 'px'; 
+                heart.style.animationDuration = (Math.random() * 12 + 6) + 's';
                 container.appendChild(heart);
             }
         }
@@ -189,7 +185,7 @@
         const audio = document.getElementById('bgMusic');
 
         function startExperience() {
-            audio.play().catch(e => console.log("Audio waiting"));
+            audio.play().catch(() => console.log("Waiting for interaction"));
             nextPage(2);
         }
 
@@ -235,28 +231,35 @@
                 document.getElementById('questionText').innerText = questions[qIdx].q;
                 document.getElementById('answerInput').value = "";
             } else {
-                if(score >= 3) nextPage(5);
-                else { alert("Try again!"); qIdx=0; score=0; showQ(); }
+                if(score >= 3) {
+                    nextPage(5);
+                } else { 
+                    alert("Do you know me? Try again my love 💔"); 
+                    qIdx = 0; 
+                    score = 0; 
+                    showQ(); 
+                }
             }
         }
 
         function checkAnswer() {
-            if(document.getElementById('answerInput').value.trim().toLowerCase() === questions[qIdx].a.toLowerCase()) score++;
-            qIdx++; showQ();
+            const userAns = document.getElementById('answerInput').value.trim().toLowerCase();
+            if(userAns === questions[qIdx].a.toLowerCase()) {
+                score++;
+            } else {
+                alert("Ans is wrong my love");
+            }
+            qIdx++; 
+            showQ();
         }
 
         function dodge() {
             const b = document.getElementById('noBtn');
-            const padding = 50;
-            // Calculations to keep it within viewable area
-            const maxX = window.innerWidth - b.offsetWidth - padding;
-            const maxY = window.innerHeight - b.offsetHeight - padding;
-            
-            const randomX = Math.max(padding, Math.floor(Math.random() * maxX));
-            const randomY = Math.max(padding, Math.floor(Math.random() * maxY));
-            
-            b.style.left = randomX + 'px';
-            b.style.top = randomY + 'px';
+            const pad = 80;
+            const maxX = window.innerWidth - b.offsetWidth - pad;
+            const maxY = window.innerHeight - b.offsetHeight - pad;
+            b.style.left = Math.max(pad, Math.floor(Math.random() * maxX)) + 'px';
+            b.style.top = Math.max(pad, Math.floor(Math.random() * maxY)) + 'px';
         }
     </script>
 </body>
