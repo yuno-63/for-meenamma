@@ -21,28 +21,22 @@
             background-color: var(--bg-white);
         }
 
-        /* Floating Hearts Container */
+        /* Floating Hearts */
         #hearts-container {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            pointer-events: none;
-            z-index: 1;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 1;
         }
-
         .floating-heart {
-            position: absolute;
-            color: var(--heart-color);
-            opacity: 0.6;
-            user-select: none;
+            position: absolute; color: var(--heart-color);
+            opacity: 0.6; user-select: none;
             animation: floatAround linear infinite;
         }
 
         @keyframes floatAround {
             0% { transform: translate(0, 0) rotate(0deg); }
-            25% { transform: translate(100px, 150px) rotate(90deg); }
-            50% { transform: translate(200px, 0px) rotate(180deg); }
-            75% { transform: translate(100px, -150px) rotate(270deg); }
+            25% { transform: translate(50px, 80px) rotate(90deg); }
+            50% { transform: translate(100px, 0px) rotate(180deg); }
+            75% { transform: translate(50px, -80px) rotate(270deg); }
             100% { transform: translate(0, 0) rotate(360deg); }
         }
 
@@ -55,6 +49,16 @@
         .glass-card {
             background: rgba(255, 255, 255, 0.95); padding: 30px; border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 320px; text-align: center;
+        }
+
+        /* Final Message Style */
+        .special-message {
+            color: var(--primary-red);
+            font-weight: 600;
+            font-size: 1.1em;
+            margin-top: 20px;
+            line-height: 1.5;
+            padding: 0 10px;
         }
 
         #plane-unit {
@@ -73,18 +77,22 @@
         @keyframes flyAway { 0% { transform: translateX(0); } 100% { transform: translateX(160vw); } }
 
         button { background: var(--primary-red); color: white; border: none; padding: 12px 25px; border-radius: 10px; font-weight: 600; cursor: pointer; margin-top: 15px; }
-        input { width: 80%; padding: 12px; margin: 8px 0; border: 1px solid #ccc; border-radius: 8px; outline: none; font-family: 'Poppins', sans-serif; }
+        input { width: 80%; padding: 12px; margin: 8px 0; border: 1px solid #ccc; border-radius: 8px; outline: none; }
         .flashcard-img { width: 100%; border-radius: 10px; border: 4px solid white; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-        #noBtn { position: absolute; background: #95a5a6; z-index: 100; transition: 0.1s; }
+        
+        /* The Jumpy No Button */
+        #noBtn { 
+            position: fixed; /* Fixed so it can jump anywhere on screen */
+            background: #95a5a6; 
+            z-index: 100; 
+            transition: all 0.2s ease;
+        }
     </style>
 </head>
 <body>
 
     <div id="hearts-container"></div>
-    
-    <audio id="bgMusic" loop preload="auto">
-        <source src="music.mp3" type="audio/mpeg">
-    </audio>
+    <audio id="bgMusic" loop preload="auto"><source src="music.mp3" type="audio/mpeg"></audio>
 
     <div id="page1" class="page active">
         <div class="glass-card">
@@ -95,7 +103,7 @@
 
     <div id="page2" class="page">
         <div class="glass-card">
-            <h2 style="font-size: 2em; margin-bottom: 20px;">Meenamma's Login</h2>
+            <h2>Meenamma's Login</h2>
             <input type="text" id="userInput" placeholder="Username">
             <input type="password" id="passInput" placeholder="Password">
             <button onclick="validateLogin()">Login</button>
@@ -117,7 +125,7 @@
     <div id="page4" class="page">
         <div class="glass-card">
             <h2 style="color: var(--primary-red);">Do you know me?</h2>
-            <p id="questionText" style="font-weight: 600; margin-bottom: 15px;"></p>
+            <p id="questionText" style="font-weight: 600;"></p>
             <input type="text" id="answerInput" placeholder="Your answer...">
             <button onclick="checkAnswer()">Submit</button>
         </div>
@@ -127,49 +135,46 @@
         <div class="glass-card">
             <span style="font-size: 60px;">🌹</span>
             <h1 style="color: var(--primary-red);">Will you marry me?</h1>
-            <div style="position: relative; height: 120px; width: 100%;">
+            <div style="height: 100px; width: 100%; display: flex; justify-content: center; align-items: center; gap: 20px;">
                 <button onclick="nextPage(6)" style="width: 100px;">YES</button>
-                <button id="noBtn" onmouseover="dodge()">No</button>
+                <button id="noBtn" onmouseover="dodge()" onclick="dodge()">No</button>
             </div>
         </div>
     </div>
 
     <div id="page6" class="page">
-        <div class="glass-card">
-            <h1 style="color: var(--primary-red);">"You are already my wife ❤️"</h1>
-            <div style="font-size: 45px; letter-spacing: 10px;">🌹🌹🌹🌹🌹</div>
+        <div class="glass-card" style="width: 400px;">
+            <h1 style="color: var(--primary-red);">You are already my wife ❤️</h1>
+            <div style="font-size: 30px;">🌹🌹🌹🌹🌹</div>
+            <p class="special-message">
+                "I may not be perfect, and life may not always be easy, but one thing you’ll never have to doubt is how deeply I care for you. No matter where life takes us, I’ll always stand beside you, choosing you, loving you, and reminding you that you’re never alone.❤️"
+            </p>
         </div>
     </div>
 
     <script>
-        // Floating Hearts Script
         function createHearts() {
             const container = document.getElementById('hearts-container');
-            const heartCount = 25;
-            for (let i = 0; i < heartCount; i++) {
+            for (let i = 0; i < 20; i++) {
                 const heart = document.createElement('div');
                 heart.className = 'floating-heart';
                 heart.innerHTML = '❤';
                 heart.style.left = Math.random() * 100 + 'vw';
                 heart.style.top = Math.random() * 100 + 'vh';
                 heart.style.fontSize = (Math.random() * 20 + 10) + 'px';
-                heart.style.animationDuration = (Math.random() * 10 + 5) + 's';
-                heart.style.animationDelay = (Math.random() * 5) + 's';
+                heart.style.animationDuration = (Math.random() * 8 + 4) + 's';
                 container.appendChild(heart);
             }
         }
         createHearts();
 
-        const USER = "meenamma";
-        const PASS = "i love you";
-        
         const memories = [
-            { src: "pic1.jpeg", msg: "I love your smile in this one!" },
-            { src: "pic2.jpeg", msg: "This moment felt like a dream." },
-            { src: "pic 3.jpeg", msg: "Looking at you is my favorite thing." },
-            { src: "pic4.jpeg", msg: "Every second with you is precious." },
-            { src: "pic5.jpeg", msg: "You look so beautiful here." },
-            { src: "pic6.jpeg", msg: "My favorite person in the world." }
+            { src: "pic1.jpeg", msg: "I love your smile!" },
+            { src: "pic2.jpeg", msg: "This was a dream." },
+            { src: "pic 3.jpeg", msg: "My favorite thing." },
+            { src: "pic4.jpeg", msg: "Precious seconds." },
+            { src: "pic5.jpeg", msg: "So beautiful." },
+            { src: "pic6.jpeg", msg: "My favorite person." }
         ];
 
         const questions = [
@@ -191,15 +196,17 @@
         function nextPage(n) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById('page'+n).classList.add('active');
-            if(n === 3) { updateContent(); document.getElementById('plane-unit').classList.add('fly-in-stop'); }
+            if(n === 3) { 
+                updateContent(); 
+                document.getElementById('plane-unit').classList.add('fly-in-stop');
+            }
             if(n === 4) showQ();
         }
 
         function validateLogin() {
-            if(document.getElementById('userInput').value.toLowerCase() === USER && 
-               document.getElementById('passInput').value.toLowerCase() === PASS) {
-                audio.play();
-                nextPage(3);
+            if(document.getElementById('userInput').value.toLowerCase() === "meenamma" && 
+               document.getElementById('passInput').value.toLowerCase() === "i love you") {
+                audio.play(); nextPage(3);
             } else { alert("Incorrect details!"); }
         }
 
@@ -229,7 +236,7 @@
                 document.getElementById('answerInput').value = "";
             } else {
                 if(score >= 3) nextPage(5);
-                else { alert("Score: " + score + "/5. Let's try again!"); qIdx=0; score=0; showQ(); }
+                else { alert("Try again!"); qIdx=0; score=0; showQ(); }
             }
         }
 
@@ -240,8 +247,16 @@
 
         function dodge() {
             const b = document.getElementById('noBtn');
-            b.style.left = Math.random() * (window.innerWidth - 150) + 'px';
-            b.style.top = Math.random() * (window.innerHeight - 150) + 'px';
+            const padding = 50;
+            // Calculations to keep it within viewable area
+            const maxX = window.innerWidth - b.offsetWidth - padding;
+            const maxY = window.innerHeight - b.offsetHeight - padding;
+            
+            const randomX = Math.max(padding, Math.floor(Math.random() * maxX));
+            const randomY = Math.max(padding, Math.floor(Math.random() * maxY));
+            
+            b.style.left = randomX + 'px';
+            b.style.top = randomY + 'px';
         }
     </script>
 </body>
