@@ -21,6 +21,7 @@
             background-color: var(--bg-white);
         }
 
+        /* Floating Hearts Layer */
         #hearts-container {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none; z-index: 1;
@@ -149,6 +150,7 @@
     </div>
 
     <script>
+        // Floating Hearts Logic
         function createHearts() {
             const container = document.getElementById('hearts-container');
             for (let i = 0; i < 25; i++) {
@@ -164,13 +166,14 @@
         }
         createHearts();
 
+        // Memory Array with New Captions
         const memories = [
-            { src: "pic1.jpeg", msg: "I love your smile!" },
-            { src: "pic2.jpeg", msg: "This was a dream." },
-            { src: "pic 3.jpeg", msg: "My favorite thing." },
-            { src: "pic4.jpeg", msg: "Precious seconds." },
-            { src: "pic5.jpeg", msg: "So beautiful." },
-            { src: "pic6.jpeg", msg: "My favorite person." }
+            { src: "pic1.jpeg", msg: "Thia wasn't just our first picture...it was the moment two stories quietly chose to become one" },
+            { src: "pic2.jpeg", msg: "That day i got lost in your eyes.." },
+            { src: "pic 3.jpeg", msg: "Waited too long...Atlast we met." },
+            { src: "pic4.jpeg", msg: "Every love story is beautiful...But ours is my fav❤️" },
+            { src: "pic5.jpeg", msg: "You+Me = Perfect❤️" },
+            { src: "pic6.jpeg", msg: "That little angry face is still my favorite… because even your storms feel warm when they’re with me ❤️😌" }
         ];
 
         const questions = [
@@ -202,8 +205,11 @@
         function validateLogin() {
             if(document.getElementById('userInput').value.toLowerCase() === "meenamma" && 
                document.getElementById('passInput').value.toLowerCase() === "i love you") {
-                audio.play(); nextPage(3);
-            } else { alert("Incorrect details!"); }
+                audio.play(); 
+                nextPage(3);
+            } else { 
+                alert("Incorrect details!"); 
+            }
         }
 
         function updateContent() {
@@ -222,7 +228,9 @@
                     unit.classList.remove('fly-away');
                     void unit.offsetWidth;
                     unit.classList.add('fly-in-stop');
-                } else nextPage(4);
+                } else {
+                    nextPage(4);
+                }
             }, 2000);
         }
 
